@@ -1,103 +1,290 @@
-import Image from "next/image";
+import Link from "next/link"
+import { Leaf, ArrowRight, Check } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gradient-to-b from-green-50 to-emerald-100">
+      <header className="container mx-auto px-4 py-6 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Leaf className="h-6 w-6 text-green-600" />
+          <span className="text-xl font-bold text-green-800">LeafLens.ai</span>
         </div>
+        <nav className="hidden md:flex items-center gap-6">
+          <Link href="#features" className="text-green-700 hover:text-green-900">
+            Features
+          </Link>
+          <Link href="#how-it-works" className="text-green-700 hover:text-green-900">
+            How it works
+          </Link>
+          <Link href="#pricing" className="text-green-700 hover:text-green-900">
+            Pricing
+          </Link>
+          {/* TODO: Integrate Clerk auth into these links */}
+          <Link href="/login" className="text-green-700 hover:text-green-900">
+            Sign in
+          </Link>
+          <Link href="/signup">
+            <Button className="bg-green-600 hover:bg-green-700">Sign In</Button>
+          </Link>
+        </nav>
+        <Button variant="ghost" className="md:hidden">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="text-green-800"
+          >
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </Button>
+      </header>
+
+      <main>
+        <section className="container mx-auto px-4 py-20 flex flex-col items-center text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-green-900 mb-6">
+            The fastest way to detect, diagnose, and treat plant diseases
+          </h1>
+          <p className="text-xl text-green-700 max-w-3xl mb-10">
+            Upload, analyze, and manage all your plant health data—images, AI diagnoses, treatment plans, regional
+            alerts, and user feedback—in one seamless platform.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link href="/signup">
+              <InteractiveHoverButton>Get started for free</InteractiveHoverButton>
+            </Link>
+            <Button size="lg" variant="outline" className="border-green-600 text-green-700 hover:bg-green-100">
+              See how it works
+            </Button>
+          </div>
+        </section>
+
+        <section id="features" className="container mx-auto px-4 py-20">
+          <h2 className="text-3xl font-bold text-green-900 text-center mb-12">Why choose LeafLens.ai?</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-lg shadow-md border border-green-100">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-green-600"
+                >
+                  <path d="M2.97 12.92A2 2 0 0 0 2 14.63v3.24a2 2 0 0 0 .97 1.71l3 1.8a2 2 0 0 0 2.06 0L12 19v-5.5l-5-3-4.03 2.42Z"></path>
+                  <path d="m7 16.5-4.74-2.85"></path>
+                  <path d="m7 16.5 5-3"></path>
+                  <path d="M7 16.5v5.17"></path>
+                  <path d="M12 13.5V19l3.97 2.38a2 2 0 0 0 2.06 0l3-1.8a2 2 0 0 0 .97-1.71v-3.24a2 2 0 0 0-.97-1.71L17 10.5l-5 3Z"></path>
+                  <path d="m17 16.5-5-3"></path>
+                  <path d="m17 16.5 4.74-2.85"></path>
+                  <path d="M17 16.5v5.17"></path>
+                  <path d="M7.97 4.42A2 2 0 0 0 7 6.13v4.37l5 3 5-3V6.13a2 2 0 0 0-.97-1.71l-3-1.8a2 2 0 0 0-2.06 0l-3 1.8Z"></path>
+                  <path d="M12 8 7.26 5.15"></path>
+                  <path d="m12 8 4.74-2.85"></path>
+                  <path d="M12 13.5V8"></path>
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-green-800 mb-2">AI-Powered Diagnosis</h3>
+              <p className="text-green-700">
+                Advanced machine learning algorithms that can identify thousands of plant diseases with 98% accuracy.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-md border border-green-100">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-green-600"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path>
+                  <path d="m9 12 2 2 4-4"></path>
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-green-800 mb-2">Personalized Treatment Plans</h3>
+              <p className="text-green-700">
+                Get customized care instructions based on your specific plant species, disease, and growing conditions.
+              </p>
+            </div>
+            <div className="bg-white p-6 rounded-lg shadow-md border border-green-100">
+              <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-green-600"
+                >
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-green-800 mb-2">Community Insights</h3>
+              <p className="text-green-700">
+                Connect with other gardeners, share experiences, and learn from a global community of plant enthusiasts.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-white py-20">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl font-bold text-green-900 text-center mb-12">
+              Ready to transform your gardening experience?
+            </h2>
+            <div className="max-w-md mx-auto bg-gradient-to-br from-green-50 to-emerald-100 p-8 rounded-lg shadow-lg border border-green-100">
+              <h3 className="text-2xl font-bold text-green-800 mb-6 text-center">Join LeafLens.ai today</h3>
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-green-600 mr-2 mt-0.5" />
+                  <span className="text-green-700">Instant plant disease diagnosis</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-green-600 mr-2 mt-0.5" />
+                  <span className="text-green-700">Personalized treatment recommendations</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-green-600 mr-2 mt-0.5" />
+                  <span className="text-green-700">Regional disease alerts and forecasts</span>
+                </li>
+                <li className="flex items-start">
+                  <Check className="h-5 w-5 text-green-600 mr-2 mt-0.5" />
+                  <span className="text-green-700">Access to plant care experts</span>
+                </li>
+              </ul>
+              <Link href="/signup" className="block">
+                <Button className="w-full bg-green-600 hover:bg-green-700">
+                  Create your free account
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      <footer className="bg-green-900 text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center gap-2 mb-4">
+                <Leaf className="h-6 w-6 text-green-300" />
+                <span className="text-xl font-bold text-white">LeafLens.ai</span>
+              </div>
+              <p className="text-green-300">
+                Transform unstructured garden snapshots into high‑quality insights and training data for smarter, faster
+                plant care.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Company</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="#" className="text-green-300 hover:text-white">
+                    About us
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-green-300 hover:text-white">
+                    Careers
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-green-300 hover:text-white">
+                    Blog
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-green-300 hover:text-white">
+                    Press
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Resources</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="#" className="text-green-300 hover:text-white">
+                    Plant Library
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-green-300 hover:text-white">
+                    Disease Guide
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-green-300 hover:text-white">
+                    Community Forum
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-green-300 hover:text-white">
+                    Help Center
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Legal</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="#" className="text-green-300 hover:text-white">
+                    Terms of Service
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-green-300 hover:text-white">
+                    Privacy Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-green-300 hover:text-white">
+                    Cookie Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-green-300 hover:text-white">
+                    Data Processing
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-green-800 mt-8 pt-8 text-center text-green-300">
+            <p>© {new Date().getFullYear()} LeafLens.ai. All rights reserved.</p>
+          </div>
+        </div>
       </footer>
     </div>
-  );
+  )
 }
