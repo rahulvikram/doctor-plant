@@ -2,6 +2,7 @@ import Link from "next/link"
 import { Leaf, ArrowRight, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
+import { SignedOut, SignedIn, UserButton, SignInButton, SignUpButton } from "@clerk/nextjs";
 
 export default function LandingPage() {
   return (
@@ -21,13 +22,17 @@ export default function LandingPage() {
           <Link href="#pricing" className="text-green-700 hover:text-green-900">
             Pricing
           </Link>
-          {/* TODO: Integrate Clerk auth into these links */}
-          <Link href="/login" className="text-green-700 hover:text-green-900">
-            Sign in
-          </Link>
-          <Link href="/signup">
-            <Button className="bg-green-600 hover:bg-green-700">Sign In</Button>
-          </Link>
+          <SignedOut>
+            <InteractiveHoverButton>
+              <SignInButton />
+            </InteractiveHoverButton>
+            <InteractiveHoverButton>
+              <SignUpButton />
+            </InteractiveHoverButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
         </nav>
         <Button variant="ghost" className="md:hidden">
           <svg
