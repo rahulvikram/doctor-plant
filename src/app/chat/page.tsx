@@ -46,7 +46,7 @@ export default function ChatPage() {
             </div>
         </SignedIn>
         <SignedOut>
-          
+          <div className="max-w-4xl mx-auto text-black">Sign in to chat with our AI assistant</div>
         </SignedOut>
       </div>
     </main>

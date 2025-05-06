@@ -1,11 +1,13 @@
 import { Upload } from "@/components/upload"
+import { SignedIn, SignedOut, UserButton, SignInButton, SignUpButton } from "@clerk/nextjs"
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#F8FFF8] to-[#EDFBF0]">
-      <div className="container mx-auto px-4 py-8">
-        <header className="mb-8">
-          <div className="flex items-center gap-3">
+      <SignedIn>
+        <div className="container mx-auto px-4 py-8">
+          <header className="mb-8">
+            <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-full bg-[#4CAF50] flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -44,6 +46,10 @@ export default function Home() {
           </div>
         </div>
       </div>
+      </SignedIn>
+      <SignedOut>
+        <div className="max-w-4xl mx-auto text-black">Sign in to upload plant images</div>
+      </SignedOut>
     </main>
   )
 }
