@@ -1,5 +1,6 @@
 import { Bell, Calendar, Home, Leaf, PieChart, Plus, Settings, Upload, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -96,7 +97,9 @@ function DashboardSidebar() {
       <SidebarHeader className="p-4">
         <div className="flex items-center gap-2">
           <Leaf className="h-6 w-6 text-green-600" />
-          <span className="text-xl font-bold text-green-800">LeafLens.ai</span>
+          <Link href="/">
+            <span className="text-xl font-bold text-green-800">LeafLens.ai</span>
+          </Link>
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -175,7 +178,9 @@ function DashboardHeader() {
       <div className="flex items-center gap-2">
         <Button variant="outline" className="gap-1">
           <Upload className="h-4 w-4" />
-          <span>Upload</span>
+          <Link href="/diagnose">
+            <span>Upload</span>
+          </Link>
         </Button>
         <Button className="gap-1 bg-green-600 hover:bg-green-700">
           <Plus className="h-4 w-4" />

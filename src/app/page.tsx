@@ -7,53 +7,6 @@ import { SignedOut, SignedIn, UserButton, SignInButton, SignUpButton } from "@cl
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-emerald-100">
-      <header className="container mx-auto px-4 py-6 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Leaf className="h-6 w-6 text-green-600" />
-          <span className="text-xl font-bold text-green-800">LeafLens.ai</span>
-        </div>
-        <nav className="hidden md:flex items-center gap-6">
-          <Link href="#features" className="text-green-700 hover:text-green-900">
-            Features
-          </Link>
-          <Link href="#how-it-works" className="text-green-700 hover:text-green-900">
-            How it works
-          </Link>
-          <Link href="#pricing" className="text-green-700 hover:text-green-900">
-            Pricing
-          </Link>
-          <SignedOut>
-            <InteractiveHoverButton>
-              <SignInButton />
-            </InteractiveHoverButton>
-            <InteractiveHoverButton>
-              <SignUpButton />
-            </InteractiveHoverButton>
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-        </nav>
-        <Button variant="ghost" className="md:hidden">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-green-800"
-          >
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </Button>
-      </header>
-
       <main>
         <section className="container mx-auto px-4 py-20 flex flex-col items-center text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-green-900 mb-6">
@@ -64,8 +17,13 @@ export default function LandingPage() {
             alerts, and user feedback—in one seamless platform.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link href="/signup">
-              <InteractiveHoverButton>Get started for free</InteractiveHoverButton>
+            <Link href="/dashboard">
+              <SignedIn>
+                <InteractiveHoverButton>User Dashboard</InteractiveHoverButton>
+              </SignedIn>
+              <SignedOut>
+                <InteractiveHoverButton>Get started for free</InteractiveHoverButton>
+              </SignedOut>
             </Link>
             <Button size="lg" variant="outline" className="border-green-600 text-green-700 hover:bg-green-100">
               See how it works
