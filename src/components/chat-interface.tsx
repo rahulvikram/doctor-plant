@@ -161,7 +161,7 @@ export function ChatInterface() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask about plant care, diseases, or upload a photo..."
-            className="flex-1 border-[#D8EFD9] focus-visible:ring-[#4CAF50]"
+            className="flex-1 border-[#D8EFD9] focus-visible:ring-[#4CAF50] text-[#427D32]"
             disabled={isLoading}
           />
 

@@ -201,7 +201,7 @@ export function Upload() {
               Plant Type
             </Label>
             <Select>
-              <SelectTrigger id="plant-type" className="border-[#D8EFD9]">
+              <SelectTrigger id="plant-type" className="border-[#D8EFD9] text-black">
                 <SelectValue placeholder="Select plant type" />
               </SelectTrigger>
               <SelectContent>
@@ -228,7 +228,7 @@ export function Upload() {
           <Textarea
             id="symptoms"
             placeholder="Describe any symptoms or concerns you've noticed (e.g., yellow leaves, spots, wilting)"
-            className="border-[#D8EFD9] min-h-[100px]"
+            className="border-[#D8EFD9] min-h-[100px] text-black"
           />
         </div>
       </div>
