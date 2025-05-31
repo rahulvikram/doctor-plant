@@ -1,8 +1,10 @@
 import { Bell, Calendar, Home, Leaf, PieChart, Plus, Settings, Upload, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { SignedIn, SignedOut, UserButton, SignInButton, SignUpButton } from "@clerk/nextjs"
 import {
   SidebarProvider,
   Sidebar,
@@ -20,73 +22,78 @@ import {
 
 export default function DashboardPage() {
   return (
-    <SidebarProvider>
-      <div className="flex min-h-screen bg-[#f8faf5]">
-        <DashboardSidebar />
-        <SidebarInset className="p-6">
-          <div className="space-y-6">
-            <DashboardHeader />
-            <Tabs defaultValue="overview" className="space-y-4">
-              <TabsList>
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="analytics">Analytics</TabsTrigger>
-                <TabsTrigger value="reports">Reports</TabsTrigger>
-                <TabsTrigger value="notifications">Notifications</TabsTrigger>
-              </TabsList>
-              <TabsContent value="overview" className="space-y-6">
-                <QuickActions />
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  <HealthSummaryCard />
-                  <UploadStatsCard />
-                  <RegionalAlertsCard />
-                </div>
-                <RecentUploads />
-                <PlantAlerts />
-              </TabsContent>
-              <TabsContent value="analytics">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Analytics</CardTitle>
-                    <CardDescription>View detailed analytics about your plant health data.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-                      Analytics charts and data will appear here
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              <TabsContent value="reports" className="space-y-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Reports</CardTitle>
-                    <CardDescription>Access and download your plant health reports.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-                      Reports will appear here
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-              <TabsContent value="notifications" className="space-y-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Notifications</CardTitle>
-                    <CardDescription>Manage your notification preferences.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-                      Notification settings will appear here
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          </div>
-        </SidebarInset>
-      </div>
-    </SidebarProvider>
+    <><SignedIn>
+      <SidebarProvider>
+        <div className="flex min-h-screen bg-[#f8faf5]">
+          <DashboardSidebar />
+          <SidebarInset className="p-6">
+            <div className="space-y-6">
+              <DashboardHeader />
+              <Tabs defaultValue="overview" className="space-y-4">
+                <TabsList>
+                  <TabsTrigger value="overview">Overview</TabsTrigger>
+                  <TabsTrigger value="analytics">Analytics</TabsTrigger>
+                  <TabsTrigger value="reports">Reports</TabsTrigger>
+                  <TabsTrigger value="notifications">Notifications</TabsTrigger>
+                </TabsList>
+                <TabsContent value="overview" className="space-y-6">
+                  <QuickActions />
+                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <HealthSummaryCard />
+                    <UploadStatsCard />
+                    <RegionalAlertsCard />
+                  </div>
+                  <RecentUploads />
+                  <PlantAlerts />
+                </TabsContent>
+                <TabsContent value="analytics">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Analytics</CardTitle>
+                      <CardDescription>View detailed analytics about your plant health data.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+                        Analytics charts and data will appear here
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+                <TabsContent value="reports" className="space-y-4">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Reports</CardTitle>
+                      <CardDescription>Access and download your plant health reports.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+                        Reports will appear here
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+                <TabsContent value="notifications" className="space-y-4">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Notifications</CardTitle>
+                      <CardDescription>Manage your notification preferences.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+                        Notification settings will appear here
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </Tabs>
+            </div>
+          </SidebarInset>
+        </div>
+      </SidebarProvider>
+    </SignedIn>
+    <SignedOut>
+      <div className="max-w-4xl mx-auto text-white">Sign in to view your dashboard</div>
+    </SignedOut></>
   )
 }
 
@@ -96,7 +103,9 @@ function DashboardSidebar() {
       <SidebarHeader className="p-4">
         <div className="flex items-center gap-2">
           <Leaf className="h-6 w-6 text-green-600" />
-          <span className="text-xl font-bold text-green-800">LeafLens.ai</span>
+          <Link href="/">
+            <span className="text-xl font-bold text-green-800">LeafLens.ai</span>
+          </Link>
         </div>
       </SidebarHeader>
       <SidebarContent>
@@ -175,7 +184,9 @@ function DashboardHeader() {
       <div className="flex items-center gap-2">
         <Button variant="outline" className="gap-1">
           <Upload className="h-4 w-4" />
-          <span>Upload</span>
+          <Link href="/diagnose">
+            <span>Upload</span>
+          </Link>
         </Button>
         <Button className="gap-1 bg-green-600 hover:bg-green-700">
           <Plus className="h-4 w-4" />
