@@ -11,21 +11,17 @@ from model.gpt4_vision_model import GPT4VisionModel
 # Load environment variables
 load_dotenv()
 
-app = Flask(__name__)
-
-
 # Configuration
 port = os.getenv('PORT', 5050)
-AI_MODEL_API_URL = os.getenv('AI_MODEL_URL', f"http://localhost:{port}/analyze")
-MAX_PROCESSING_TIME = 180  # 3 minutes in seconds
+app = Flask(__name__)
 
-def ai_response(image_file: BytesIO, prompt: str, max_processing_time: int) -> dict:
-    # create an instance of the GPT-4 Vision model
-    gpt4_vision_model = GPT4VisionModel()
+# create an instance of the GPT-4 Vision model
+gpt4_vision_model = GPT4VisionModel()
 
+def ai_response(image_file: BytesIO, prompt: str) -> dict:
     # analyze the image
     try:
-        analysis_results = gpt4_vision_model.analyze_image(image_file)
+        analysis_results = gpt4_vision_model.analyze_image(image_file, prompt)
         return analysis_results
     except Exception as e:
         print(f"Error analyzing image: {e}")
