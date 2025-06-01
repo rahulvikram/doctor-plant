@@ -4,7 +4,7 @@ from PIL import Image
 import io
 import json
 
-def create_test_image():
+def create_test_image() -> io.BytesIO:
     """Create a simple test image with a colored rectangle"""
     # Create a new image 
     img = Image.new('RGB', (200, 200), color='white')
