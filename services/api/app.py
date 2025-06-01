@@ -6,6 +6,7 @@ from reportlab.lib.pagesizes import letter
 from io import BytesIO
 import time
 from dotenv import load_dotenv
+from model.gpt4_vision_model import GPT4VisionModel
 
 # Load environment variables
 load_dotenv()
@@ -18,20 +19,26 @@ port = os.getenv('PORT', 5050)
 AI_MODEL_API_URL = os.getenv('AI_MODEL_URL', f"http://localhost:{port}/analyze")
 MAX_PROCESSING_TIME = 180  # 3 minutes in seconds
 
-def mock_ai_response():
-    """Generate a mock AI response for testing"""
-    return {
-        "disease_detected": "Leaf Blight",
-        "confidence": "89%",
-        "severity": "High",
-        "recommendations": [
-            "Remove affected leaves",
-            "Improve air circulation"
-        ],
-        "plant_health": "30%"
-    }
+def ai_response(image_file: BytesIO, prompt: str, max_processing_time: int) -> dict:
+    # create an instance of the GPT-4 Vision model
+    gpt4_vision_model = GPT4VisionModel()
 
-def generate_pdf_report(analysis_results):
+    # analyze the image
+    try:
+        analysis_results = gpt4_vision_model.analyze_image(image_file)
+        return analysis_results
+    except Exception as e:
+        print(f"Error analyzing image: {e}")
+        return {
+            "disease_detected": "Service Error",
+            "confidence": "0%",
+            "severity": "Unknown",
+            "recommendations": [f"Error: {str(e)}"],
+            "plant_health": "Unknown"
+        }   
+
+
+def generate_pdf_report(analysis_results: dict) -> BytesIO:
     """Generate a PDF report from the AI model's analysis results."""
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize=letter)
@@ -81,7 +88,7 @@ def analyze_plant():
         print(f"Received prompt: {prompt}")
         
         # For testing, use mock AI response
-        ai_response = mock_ai_response()
+        ai_response = ai_response(image_file, prompt, AI_MODEL_API_URL, MAX_PROCESSING_TIME)
         print("Generated mock AI response:", ai_response)
         
         # Generate PDF report
