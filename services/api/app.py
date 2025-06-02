@@ -11,21 +11,16 @@ from model.gpt4_vision_model import GPT4VisionModel
 # Load environment variables
 load_dotenv()
 
-app = Flask(__name__)
-
-
 # Configuration
 port = os.getenv('PORT', 5050)
-AI_MODEL_API_URL = os.getenv('AI_MODEL_URL', f"http://localhost:{port}/analyze")
-MAX_PROCESSING_TIME = 180  # 3 minutes in seconds
+app = Flask(__name__)
 
-def ai_response(image_file: BytesIO, prompt: str, max_processing_time: int) -> dict:
-    # create an instance of the GPT-4 Vision model
-    gpt4_vision_model = GPT4VisionModel()
+# create an instance of the GPT-4 Vision model
+gpt4_vision_model = GPT4VisionModel()
 
-    # analyze the image
+def ai_response(image_file: BytesIO, prompt: str) -> dict:
     try:
-        analysis_results = gpt4_vision_model.analyze_image(image_file)
+        analysis_results = gpt4_vision_model.analyze_image(image_file, prompt)
         return analysis_results
     except Exception as e:
         print(f"Error analyzing image: {e}")
@@ -86,13 +81,18 @@ def analyze_plant():
         
         print(f"Received image: {image_file.filename}")
         print(f"Received prompt: {prompt}")
+
+        # get the response from the AI model
+        gpt_response = ai_response(image_file, prompt)
         
-        # For testing, use mock AI response
-        ai_response = ai_response(image_file, prompt, AI_MODEL_API_URL, MAX_PROCESSING_TIME)
-        print("Generated mock AI response:", ai_response)
+        # check if the response is an error
+        if "error" in gpt_response['disease_detected']:
+            return {'error': gpt_response['disease_detected']}, 500
+        
+        print("Generated mock AI response:", gpt_response)
         
         # Generate PDF report
-        pdf_buffer = generate_pdf_report(ai_response)
+        pdf_buffer = generate_pdf_report(gpt_response)
         print("Generated PDF report")
         
         # Return the PDF file

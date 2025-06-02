@@ -61,7 +61,7 @@ class GPT4VisionModel:
         base64_string = base64.b64encode(image_file.read()).decode('utf-8')
         return f"data:image/jpeg;base64,{base64_string}"
     
-    def analyze_image(self, image_file: BytesIO) -> dict:
+    def analyze_image(self, image_file: BytesIO, prompt: str) -> dict:
         """
         Analyze the image using the GPT-4 Vision model
         """
@@ -77,7 +77,7 @@ class GPT4VisionModel:
                         "content": [
                             {
                                 "type": "text",
-                                "text": """Analyze this plant image for diseases and health issues. 
+                                "text": f"""Analyze this plant image for diseases and health issues. 
                                 Return ONLY a valid JSON object with this exact structure:
                                 {
                                     "disease_detected": "disease name or 'Healthy'",
@@ -85,7 +85,9 @@ class GPT4VisionModel:
                                     "severity": "None/Low/Medium/High",
                                     "recommendations": ["action1", "action2"],
                                     "plant_health": "percentage like '70%'"
-                                }"""
+                                }
+                                Here is some additional context provided by the user: {prompt}
+                                """
                             },
                             {
                                 "type": "image_url",
@@ -108,7 +110,7 @@ class GPT4VisionModel:
         except Exception as e:
             print(f"GPT-4 Vision error: {e}")
             return {
-                "disease_detected": "Service Error",
+                "disease_detected": "GPT-4 Vision Model Error",
                 "confidence": "0%",
                 "severity": "Unknown",
                 "recommendations": [f"Error: {str(e)}"],
