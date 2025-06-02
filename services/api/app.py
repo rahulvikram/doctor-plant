@@ -66,6 +66,12 @@ def generate_pdf_report(analysis_results: dict) -> BytesIO:
     buffer.seek(0)
     return buffer
 
+
+@app.route('/')
+def landing_page():
+    return "Welcome to the Plant Disease Diagnostic Service"
+
+
 @app.route('/analyze', methods=['POST', 'OPTIONS'])
 def analyze_plant():
     if request.method == 'OPTIONS':
