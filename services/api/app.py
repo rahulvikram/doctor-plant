@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, make_response
+from flask import Flask, request, send_file, make_response, jsonify
 from flask_cors import CORS
 import requests
 import os
@@ -7,8 +7,10 @@ from reportlab.lib.pagesizes import letter
 from io import BytesIO
 import time
 from dotenv import load_dotenv
-from models.gemini2_vision_model import Gemini2VisionModel
 import asyncio
+
+from models.gemini2_vision_model import Gemini2VisionModel
+from models.gemini2_chat_model import Gemini2ChatModel
 
 # Load environment variables
 load_dotenv()
@@ -20,6 +22,9 @@ CORS(app)
 
 # create an instance of the gemini-4 Vision model
 gemini2_vision_model = Gemini2VisionModel()
+
+# create an instance of the gemini-2 Chat model
+gemini2_chat_model = Gemini2ChatModel()
 
 async def ai_response(image_data: bytes, prompt: str, plant_type: str, plant_species: str) -> dict:
     try:
@@ -95,6 +100,22 @@ def generate_pdf_report(analysis_results: dict) -> BytesIO:
 def landing_page():
     return "Welcome to the Plant Disease Diagnostic Service"
 
+@app.route('/chat', methods=['POST', 'OPTIONS'])
+def chat():
+    if request.method == 'OPTIONS':
+        response = make_response(('', 200))
+        response.headers.add('Access-Control-Allow-Origin', '*') # Be more specific in production
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'POST,OPTIONS')
+        return response
+    
+    try:
+        message = request.json.get('message', '')
+        response = gemini2_chat_model.chat(message)
+        print(f"Response: {response}")
+        return jsonify({'response': response})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/analyze', methods=['POST', 'OPTIONS'])
 def analyze_plant():

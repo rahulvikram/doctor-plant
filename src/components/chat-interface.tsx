@@ -34,6 +34,8 @@ export function ChatInterface() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
+  const API_ROUTE_PORT = process.env.NEXT_PUBLIC_API_ROUTE_PORT
+
   // Auto-scroll to bottom of messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -61,9 +63,9 @@ export function ChatInterface() {
     setInput("")
     setIsLoading(true)
 
-    // Simulate AI response
-    setTimeout(() => {
-      const response = generateResponse(input)
+    // AI response
+    setTimeout(async () => {
+      const response = await generateResponse(input)
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         content: response,
@@ -73,7 +75,7 @@ export function ChatInterface() {
 
       setMessages((prev) => [...prev, assistantMessage])
       setIsLoading(false)
-    }, 1500)
+    }, 1000)
   }
 
   const handleImageUpload = (file: File) => {
@@ -111,24 +113,17 @@ export function ChatInterface() {
   }
 
   // Simple response generator based on keywords
-  const generateResponse = (query: string): string => {
-    const lowerQuery = query.toLowerCase()
-
-    if (lowerQuery.includes("yellow leaves") || lowerQuery.includes("yellowing")) {
-      return "Yellowing leaves can be caused by several factors: overwatering, underwatering, nutrient deficiencies (especially nitrogen), or insufficient light. Check the soil moisture first - it should be moist but not soggy. If you'd like a more accurate diagnosis, please upload a photo of your plant."
-    } else if (lowerQuery.includes("brown spots") || lowerQuery.includes("spots")) {
-      return "Brown spots on leaves often indicate fungal infection, which can be caused by overwatering or high humidity. Try to improve air circulation around your plant and avoid getting water on the leaves when watering. A fungicide may help if the problem persists. Would you like to upload an image for a more specific diagnosis?"
-    } else if (lowerQuery.includes("water") || lowerQuery.includes("watering")) {
-      return "Proper watering depends on the plant species, pot size, and environmental conditions. As a general rule, water when the top inch of soil feels dry. Most plants prefer thorough watering until water drains from the bottom, then allowing the soil to dry somewhat before watering again. What specific plant are you asking about?"
-    } else if (lowerQuery.includes("fertilizer") || lowerQuery.includes("feed")) {
-      return "Most houseplants benefit from fertilizing during their active growing season (spring and summer) with a balanced, water-soluble fertilizer diluted to half the recommended strength. Reduce or stop fertilizing in fall and winter when growth slows. What type of plant are you growing?"
-    } else if (lowerQuery.includes("hello") || lowerQuery.includes("hi") || lowerQuery.includes("hey")) {
-      return "Hello! I'm your LeafLens plant health assistant. How can I help with your plants today? You can ask me about plant care, disease symptoms, or upload a photo for analysis."
-    } else if (lowerQuery.includes("thank")) {
-      return "You're welcome! Feel free to ask if you have any other questions about your plants. I'm here to help!"
-    } else {
-      return "I'd be happy to help with your plant question. For the most accurate advice, consider uploading a photo of your plant so I can see exactly what you're describing. Would you like specific care tips or disease identification?"
-    }
+  const generateResponse = async (query: string): Promise<string> => {
+    // make a request to the chat api route
+    const response = await fetch(`http://localhost:${API_ROUTE_PORT}/chat`, {
+      method: "POST",
+      body: JSON.stringify({ message: query }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    const data = await response.json()
+    return data.response
   }
 
   return (
