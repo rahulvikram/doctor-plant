@@ -23,7 +23,7 @@ export function Upload() {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
 
-  const API_ROUTE_PORT = process.env.NEXT_PUBLIC_API_ROUTE_PORT || 3000
+  const API_ROUTE_PORT = process.env.NEXT_PUBLIC_API_ROUTE_PORT || 5000
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -31,7 +31,6 @@ export function Upload() {
       addFiles(newFiles)
     }
   }
-
 
   const addFiles = (newFiles: File[]) => {
     const validFiles = newFiles.filter((file) => file.type.startsWith("image/"))
@@ -117,9 +116,7 @@ export function Upload() {
         body: formData
       })
 
-      if (response.ok) {
-
-        
+      if (response.ok) {      
         // download the PDF report
         const blob = await response.blob()
         const contentDisposition = response.headers.get("content-disposition")
@@ -157,12 +154,25 @@ export function Upload() {
       alert("Plant analysis report downloaded successfully!")
             
       } else {
-        const errorData = await response.json() // retrieve the json error data
-        alert(`Error analyzing plant: ${errorData.error}`)
-        return
+        let errorMessage = `Error analyzing plant: ${response.status} ${response.statusText}`
+        try {
+          const errorData = await response.json()
+          if (errorData && errorData.error) {
+            errorMessage = `Error analyzing plant: ${errorData.error}`
+          }
+        } catch (jsonError) {
+          console.warn("Response was not valid JSON. Reading as text.")
+          try {
+            const errorText = await response.text()
+            errorMessage = `Error analyzing plant: ${response.status} ${response.statusText}. Server response: ${errorText.substring(0, 300)}...`
+          } catch (textError) {
+            console.error("Could not read error response as text.", textError)
+          }
+        }
+        alert(errorMessage)
       }
     } catch (error) {
-      console.error("Error analyzing plant:", error instanceof Error ? error.message : "Unknown error")
+      console.error("Error analyzing plant:", error)
     } finally {
       setIsUploading(false) // reset the isUploading state to false to hide the loading spinner
     }
