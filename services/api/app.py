@@ -7,7 +7,7 @@ from reportlab.lib.pagesizes import letter
 from io import BytesIO
 import time
 from dotenv import load_dotenv
-from model.gemini2_vision_model import Gemini2VisionModel
+from models.gemini2_vision_model import Gemini2VisionModel
 import asyncio
 
 # Load environment variables
