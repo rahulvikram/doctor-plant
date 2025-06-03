@@ -17,17 +17,11 @@ export default function LandingPage() {
             alerts, and user feedback—in one seamless platform.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link href="/dashboard">
-              <SignedIn>
-                <InteractiveHoverButton>User Dashboard</InteractiveHoverButton>
-              </SignedIn>
-              <SignedOut>
-                <InteractiveHoverButton>Get started for free</InteractiveHoverButton>
-              </SignedOut>
-            </Link>
-            <Button size="lg" variant="outline" className="border-green-600 text-green-700 hover:bg-green-100">
-              See how it works
-            </Button>
+            <SignedOut>
+              <Link href="/dashboard">
+                  <InteractiveHoverButton>Get started for free</InteractiveHoverButton>
+              </Link>
+            </SignedOut>
           </div>
         </section>
 

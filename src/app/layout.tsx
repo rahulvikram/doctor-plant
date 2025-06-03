@@ -38,9 +38,6 @@ export default function RootLayout({
             <Link href="/" className="text-xl font-bold text-green-800">LeafLens.ai</Link>
           </div>
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="#features" className="text-green-700 hover:text-green-900">
-              Features
-            </Link>
             <Link href="/dashboard" className="text-green-700 hover:text-green-900">
               Dashboard
             </Link>

@@ -1,6 +1,9 @@
+"use client"
+
 import { Bell, Calendar, Home, Leaf, PieChart, Plus, Settings, Upload, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -38,11 +41,6 @@ export default function DashboardPage() {
                 </TabsList>
                 <TabsContent value="overview" className="space-y-6">
                   <QuickActions />
-                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    <HealthSummaryCard />
-                    <UploadStatsCard />
-                    <RegionalAlertsCard />
-                  </div>
                   <RecentUploads />
                   <PlantAlerts />
                 </TabsContent>
@@ -198,6 +196,7 @@ function DashboardHeader() {
 }
 
 function QuickActions() {
+  const router = useRouter()
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Card className="bg-green-50 border-green-100">
@@ -209,7 +208,7 @@ function QuickActions() {
           <p className="text-xs text-muted-foreground">Upload a photo for instant analysis</p>
         </CardContent>
         <CardFooter>
-          <Button size="sm" className="w-full bg-green-600 hover:bg-green-700">
+          <Button size="sm" className="w-full bg-green-600 hover:bg-green-700" onClick={() => router.push("/diagnose")}>
             Start Scan
           </Button>
         </CardFooter>
@@ -242,59 +241,7 @@ function QuickActions() {
           </Button>
         </CardFooter>
       </Card>
-      <Card className="bg-lime-50 border-lime-100">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-lime-800">Community</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-lime-900">5 New Posts</div>
-          <p className="text-xs text-muted-foreground">Connect with plant enthusiasts</p>
-        </CardContent>
-        <CardFooter>
-          <Button size="sm" variant="outline" className="w-full border-lime-200 text-lime-700">
-            Join Discussion
-          </Button>
-        </CardFooter>
-      </Card>
     </div>
-  )
-}
-
-function HealthSummaryCard() {
-  return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium">Plant Health Summary</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span>Healthy</span>
-            <span className="font-medium">18 plants</span>
-          </div>
-          <Progress value={75} className="h-2 bg-gray-100 [&>div]:bg-green-500" />
-        </div>
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span>Needs Attention</span>
-            <span className="font-medium">4 plants</span>
-          </div>
-          <Progress value={17} className="h-2 bg-gray-100 [&>div]:bg-amber-500" />
-        </div>
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span>Critical</span>
-            <span className="font-medium">2 plants</span>
-          </div>
-          <Progress value={8} className="h-2 bg-gray-100 [&>div]:bg-red-500" />
-        </div>
-      </CardContent>
-      <CardFooter>
-        <Button variant="ghost" size="sm" className="w-full text-green-700">
-          View Detailed Report
-        </Button>
-      </CardFooter>
-    </Card>
   )
 }
 
@@ -374,36 +321,7 @@ function RegionalAlertsCard() {
 }
 
 function RecentUploads() {
-  const recentUploads = [
-    {
-      id: 1,
-      name: "Monstera Deliciosa",
-      date: "Today, 10:23 AM",
-      status: "Healthy",
-      image: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      id: 2,
-      name: "Fiddle Leaf Fig",
-      date: "Yesterday, 4:45 PM",
-      status: "Needs Water",
-      image: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      id: 3,
-      name: "Snake Plant",
-      date: "Yesterday, 2:30 PM",
-      status: "Healthy",
-      image: "/placeholder.svg?height=80&width=80",
-    },
-    {
-      id: 4,
-      name: "Pothos",
-      date: "Apr 18, 9:15 AM",
-      status: "Leaf Spots Detected",
-      image: "/placeholder.svg?height=80&width=80",
-    },
-  ]
+  const recentUploads: any[] = []
 
   return (
     <Card>
@@ -450,32 +368,7 @@ function RecentUploads() {
 }
 
 function PlantAlerts() {
-  const alerts = [
-    {
-      id: 1,
-      plant: "Fiddle Leaf Fig",
-      issue: "Needs Water",
-      severity: "medium",
-      date: "Apr 20, 2025",
-      description: "Soil is dry to touch. Water thoroughly until water drains from bottom of pot.",
-    },
-    {
-      id: 2,
-      plant: "Pothos",
-      issue: "Leaf Spots Detected",
-      severity: "high",
-      date: "Apr 18, 2025",
-      description: "Fungal infection detected. Remove affected leaves and treat with fungicide.",
-    },
-    {
-      id: 3,
-      plant: "Orchid",
-      issue: "Yellowing Leaves",
-      severity: "medium",
-      date: "Apr 15, 2025",
-      description: "Possible overwatering. Allow soil to dry completely before next watering.",
-    },
-  ]
+  const alerts: any[] = []
 
   return (
     <Card>
