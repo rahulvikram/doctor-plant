@@ -9,7 +9,6 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ImagePlus, UploadIcon, X, Crop, Loader2 } from "lucide-react"
-import { RegionSelector } from "@/components/region-selector"
 import { useRouter } from "next/navigation"
 
 export function Upload() {
@@ -17,9 +16,14 @@ export function Upload() {
   const [previews, setPreviews] = useState<string[]>([])
   const [isDragging, setIsDragging] = useState(false)
   const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null)
+  const [plantType, setPlantType] = useState<string>("")
+  const [plantSpecies, setPlantSpecies] = useState<string>("")
+  const [symptoms, setSymptoms] = useState<string>("")
   const [isUploading, setIsUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
+
+  const API_ROUTE_PORT = process.env.NEXT_PUBLIC_API_ROUTE_PORT || 3000
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -90,18 +94,79 @@ export function Upload() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (files.length === 0) return
+    // check if the user has uploaded any images
+    if (files.length === 0) {
+      alert("Please upload at least one image")
+      return
+    }
 
+    // set the isUploading state to true to show the loading spinner
     setIsUploading(true)
 
-    // Simulate upload delay
-    setTimeout(() => {
-      setIsUploading(false)
-      // Reset form after successful upload
+    // set up the form data to send to the server
+    const formData = new FormData()
+    formData.append("plant_type", plantType)
+    formData.append("plant_species", plantSpecies)
+    formData.append("prompt", symptoms)
+    formData.append("image", files[0])
+
+    // send the form data to the server flask api route
+    try {
+      const response = await fetch(`http://localhost:${API_ROUTE_PORT}/analyze`, {
+        method: "POST",
+        body: formData
+      })
+
+      if (response.ok) {
+
+        
+        // download the PDF report
+        const blob = await response.blob()
+        const contentDisposition = response.headers.get("content-disposition")
+        let filename = "plant_diagnosis_report.pdf" // Default filename
+        if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename="?(.+)"?/i)
+        if (filenameMatch && filenameMatch.length > 1) {
+          filename = filenameMatch[1]
+        }
+      }
+      
+      // create a temporary URL for the blob
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = filename
+      document.body.appendChild(a)
+      a.click()
+      a.remove()
+      window.URL.revokeObjectURL(url)
+
+
+      // Reset form state
       setFiles([])
       setPreviews([])
       setSelectedImageIndex(null)
-    }, 2000)
+      setPlantType("")
+      setPlantSpecies("")
+      setSymptoms("")
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""
+      }
+      
+      // show a success message
+      alert("Plant analysis report downloaded successfully!")
+            
+      } else {
+        const errorData = await response.json() // retrieve the json error data
+        alert(`Error analyzing plant: ${errorData.error}`)
+        return
+      }
+    } catch (error) {
+      console.error("Error analyzing plant:", error instanceof Error ? error.message : "Unknown error")
+    } finally {
+      setIsUploading(false) // reset the isUploading state to false to hide the loading spinner
+    }
+
   }
 
   return (
@@ -182,25 +247,13 @@ export function Upload() {
         </div>
       )}
 
-      {selectedImageIndex !== null && (
-        <div className="space-y-4 p-4 bg-[#F8FFF8] rounded-lg border border-[#D8EFD9]">
-          <h3 className="text-md font-medium text-[#2E7D32]">Select Problem Area</h3>
-          <p className="text-sm text-[#558B59]">
-            Highlight the affected area of your plant to get more accurate diagnosis
-          </p>
-          <div className="relative max-h-[400px] overflow-hidden rounded-lg">
-            <RegionSelector imageUrl={previews[selectedImageIndex]} />
-          </div>
-        </div>
-      )}
-
       <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="plant-type" className="text-[#2E7D32]">
               Plant Type
             </Label>
-            <Select>
+            <Select value={plantType} onValueChange={setPlantType}>
               <SelectTrigger id="plant-type" className="border-[#D8EFD9] text-black">
                 <SelectValue placeholder="Select plant type" />
               </SelectTrigger>
@@ -218,7 +271,13 @@ export function Upload() {
             <Label htmlFor="plant-species" className="text-[#2E7D32]">
               Plant Species (if known)
             </Label>
-            <Input id="plant-species" placeholder="E.g., Monstera, Tomato, Rose" className="border-[#D8EFD9] text-black" />
+            <Input
+              id="plant-species"
+              value={plantSpecies}
+              onChange={(e) => setPlantSpecies(e.target.value)}
+              placeholder="E.g., Monstera, Tomato, Rose"
+              className="border-[#D8EFD9] text-black"
+            />
           </div>
         </div>
         <div className="space-y-2">
@@ -227,6 +286,8 @@ export function Upload() {
           </Label>
           <Textarea
             id="symptoms"
+            value={symptoms}
+            onChange={(e) => setSymptoms(e.target.value)}
             placeholder="Describe any symptoms or concerns you've noticed (e.g., yellow leaves, spots, wilting)"
             className="border-[#D8EFD9] min-h-[100px] text-black"
           />
@@ -235,14 +296,16 @@ export function Upload() {
 
       <div className="flex justify-end">
         <Button
-          onClick={() => router.back()}
-          className="bg-white text-[#4CAF50] border-green-800"
+          type="button" // Ensure cancel button does not submit the form
+          onClick={() => {
+            if (!isUploading) { // Prevent navigation if uploading
+              router.back()
+            }
+          }}
+          className="bg-white text-[#4CAF50] border-green-800 mr-2" // Added margin for spacing
+          disabled={isUploading} // Disable cancel button during upload
         >
-          {isUploading ? (
-            <></>
-          ) : (
-            <>Cancel</>
-          )}
+          Cancel
         </Button>
         <Button
           type="submit"
