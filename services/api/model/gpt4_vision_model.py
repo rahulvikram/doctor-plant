@@ -61,7 +61,7 @@ class GPT4VisionModel:
         base64_string = base64.b64encode(image_file.read()).decode('utf-8')
         return f"data:image/jpeg;base64,{base64_string}"
     
-    def analyze_image(self, image_file: BytesIO, prompt: str) -> dict:
+    async def analyze_image(self, image_file: BytesIO, prompt: str, plant_type: str, plant_species: str) -> dict:
         """
         Analyze the image using the GPT-4 Vision model
         """
@@ -69,7 +69,7 @@ class GPT4VisionModel:
         try:
            compressed_base64 = self.encode_and_compress_image(image_file)
 
-           response = self.client.chat.completions.create(
+           response = await self.client.chat.completions.create(
                model="gpt-4-vision-preview",
                messages=[
                     {
@@ -86,7 +86,11 @@ class GPT4VisionModel:
                                     "recommendations": ["action1", "action2"],
                                     "plant_health": "percentage like '70%'"
                                 }
-                                Here is some additional context provided by the user: {prompt}
+                                Here is some additional context provided by the user: {
+                                    "plant_type": {plant_type if plant_type else "Unknown"},
+                                    "plant_species": {plant_species if plant_species else "Unknown"},
+                                    "symptoms_or_concerns": {prompt if prompt else "Unknown"}
+                                }
                                 """
                             },
                             {

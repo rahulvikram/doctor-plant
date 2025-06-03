@@ -18,9 +18,9 @@ app = Flask(__name__)
 # create an instance of the GPT-4 Vision model
 gpt4_vision_model = GPT4VisionModel()
 
-def ai_response(image_file: BytesIO, prompt: str) -> dict:
+async def ai_response(image_file: BytesIO, prompt: str, plant_type: str, plant_species: str) -> dict:
     try:
-        analysis_results = gpt4_vision_model.analyze_image(image_file, prompt)
+        analysis_results = await gpt4_vision_model.analyze_image(image_file, prompt, plant_type, plant_species)
         return analysis_results
     except Exception as e:
         print(f"Error analyzing image: {e}")
@@ -83,13 +83,18 @@ def analyze_plant():
             return {'error': 'No image file provided'}, 400
         
         image_file = request.files['image']
+        plant_type = request.form.get('plant_type', '')
+        plant_species = request.form.get('plant_species', '')
         prompt = request.form.get('prompt', '')
         
+
         print(f"Received image: {image_file.filename}")
+        print(f"Received plant type: {plant_type}")
+        print(f"Received plant species: {plant_species}")
         print(f"Received prompt: {prompt}")
 
         # get the response from the AI model
-        gpt_response = ai_response(image_file, prompt)
+        gpt_response = ai_response(image_file, prompt, plant_type, plant_species)
         
         # check if the response is an error
         if "error" in gpt_response['disease_detected']:
