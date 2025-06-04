@@ -10,6 +10,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ImagePlus, UploadIcon, X, Crop, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { getDatabase } from "@/app/db/dbAdapter"
+import { Treatment } from "@/app/db/Types"
+import { v4 as uuidv4 } from 'uuid';
 
 export function Upload() {
   const [files, setFiles] = useState<File[]>([])
@@ -117,8 +120,13 @@ export function Upload() {
       })
 
       if (response.ok) {      
-        // download the PDF report
+        // Get the analysis results from the custom header
+        const analysisResults = JSON.parse(response.headers.get('X-Analysis-Results') || '{}')
+        
+        // Download the PDF report
         const blob = await response.blob()
+
+        // download the PDF report
         const contentDisposition = response.headers.get("content-disposition")
         let filename = "plant_diagnosis_report.pdf" // Default filename
         if (contentDisposition) {
@@ -138,7 +146,17 @@ export function Upload() {
         a.remove()
         window.URL.revokeObjectURL(url)
 
-        
+        // add the treatment to the database
+        const db = await getDatabase()
+        const treatment: Treatment = {
+          id: uuidv4(),
+          disease: analysisResults.disease_detected,
+          treatments: analysisResults.recommendations,
+          image: previews[0],
+          date: new Date().toISOString()
+        }
+
+        await db.addTreatment(treatment)
 
         // Reset form state
         setFiles([])

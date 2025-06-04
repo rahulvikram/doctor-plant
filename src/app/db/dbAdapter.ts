@@ -29,7 +29,8 @@ class DatabaseAdapter {
 
     // Add a new treatment plan
     async addTreatment(treatment: Treatment): Promise<void> {
-
+        this.db.data.treatments.push(treatment);
+        await this.db.write();
     }
 }
 

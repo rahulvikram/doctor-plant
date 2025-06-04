@@ -143,7 +143,7 @@ def analyze_plant():
         print(f"Received plant species: {plant_species}")
         print(f"Received prompt: {prompt}")
 
-        # Correctly run the async function and get its result
+        # Get Gemini response
         gemini_response = asyncio.run(ai_response(image_data, prompt, plant_type, plant_species))
         
         # Check for errors
@@ -160,15 +160,21 @@ def analyze_plant():
             print(f"Error from ai_response: {gemini_response}")
             return {'error': f"AI Analysis Failed: {error_detail}"}, 500
                 
+        # Generate PDF
         pdf_buffer = generate_pdf_report(gemini_response)
         
-        # Return the PDF file
-        return send_file(
+        # Create response with both JSON data and PDF
+        response = make_response(send_file(
             pdf_buffer,
             mimetype='application/pdf',
             as_attachment=True,
-            download_name=f'plant_diagnosis_report_{time.strftime("%Y%m%d_%H%M%S")}.pdf' # Unique filename
-        )
+            download_name=f'plant_diagnosis_report_{time.strftime("%Y%m%d_%H%M%S")}.pdf'
+        ))
+        
+        # Add the analysis results as headers
+        response.headers['X-Analysis-Results'] = jsonify(gemini_response).get_data(as_text=True)
+
+        return response
             
     except Exception as e:
         print(f"Error occurred: {str(e)}")
