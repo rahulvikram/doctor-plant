@@ -122,37 +122,38 @@ export function Upload() {
         const contentDisposition = response.headers.get("content-disposition")
         let filename = "plant_diagnosis_report.pdf" // Default filename
         if (contentDisposition) {
-        const filenameMatch = contentDisposition.match(/filename="?(.+)"?/i)
-        if (filenameMatch && filenameMatch.length > 1) {
-          filename = filenameMatch[1]
+          const filenameMatch = contentDisposition.match(/filename="?(.+)"?/i)
+          if (filenameMatch && filenameMatch.length > 1) {
+            filename = filenameMatch[1]
+          }
         }
-      }
       
-      // create a temporary URL for the blob
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = filename
-      document.body.appendChild(a)
-      a.click()
-      a.remove()
-      window.URL.revokeObjectURL(url)
+        // create a temporary URL for the blob
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = filename
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+        window.URL.revokeObjectURL(url)
 
+        
 
-      // Reset form state
-      setFiles([])
-      setPreviews([])
-      setSelectedImageIndex(null)
-      setPlantType("")
-      setPlantSpecies("")
-      setSymptoms("")
-      if (fileInputRef.current) {
-        fileInputRef.current.value = ""
-      }
+        // Reset form state
+        setFiles([])
+        setPreviews([])
+        setSelectedImageIndex(null)
+        setPlantType("")
+        setPlantSpecies("")
+        setSymptoms("")
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ""
+        }
       
-      // show a success message
-      alert("Plant analysis report downloaded successfully!")
-            
+        // show a success message
+        alert("Plant analysis report downloaded successfully!")
+        router.push("/dashboard")
       } else {
         let errorMessage = `Error analyzing plant: ${response.status} ${response.statusText}`
         try {

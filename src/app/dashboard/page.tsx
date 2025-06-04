@@ -28,7 +28,6 @@ export default function DashboardPage() {
     <><SignedIn>
       <SidebarProvider>
         <div className="flex min-h-screen bg-[#f8faf5]">
-          <DashboardSidebar />
           <SidebarInset className="p-6">
             <div className="space-y-6">
               <DashboardHeader />
@@ -42,7 +41,6 @@ export default function DashboardPage() {
                 <TabsContent value="overview" className="space-y-6">
                   <QuickActions />
                   <RecentUploads />
-                  <PlantAlerts />
                 </TabsContent>
                 <TabsContent value="analytics">
                   <Card>
@@ -95,83 +93,6 @@ export default function DashboardPage() {
   )
 }
 
-function DashboardSidebar() {
-  return (
-    <Sidebar variant="inset" className="border-r border-green-100">
-      <SidebarHeader className="p-4">
-        <div className="flex items-center gap-2">
-          <Leaf className="h-6 w-6 text-green-600" />
-          <Link href="/">
-            <span className="text-xl font-bold text-green-800">LeafLens.ai</span>
-          </Link>
-        </div>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Main</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton isActive tooltip="Dashboard">
-                  <Home className="h-4 w-4" />
-                  <span>Dashboard</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Uploads">
-                  <Upload className="h-4 w-4" />
-                  <span>My Uploads</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Analytics">
-                  <PieChart className="h-4 w-4" />
-                  <span>Analytics</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Calendar">
-                  <Calendar className="h-4 w-4" />
-                  <span>Calendar</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Community</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Community">
-                  <Users className="h-4 w-4" />
-                  <span>Community</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton tooltip="Notifications">
-                  <Bell className="h-4 w-4" />
-                  <span>Notifications</span>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter className="p-4">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Settings">
-              <Settings className="h-4 w-4" />
-              <span>Settings</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-    </Sidebar>
-  )
-}
-
 function DashboardHeader() {
   return (
     <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
@@ -196,9 +117,10 @@ function DashboardHeader() {
 }
 
 function QuickActions() {
-  const router = useRouter()
+  const router = useRouter();
+
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       <Card className="bg-green-50 border-green-100">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-green-800">Scan Plant</CardTitle>
@@ -367,47 +289,3 @@ function RecentUploads() {
   )
 }
 
-function PlantAlerts() {
-  const alerts: any[] = []
-
-  return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>Plant Alerts</CardTitle>
-          <Button variant="ghost" size="sm" className="text-green-700">
-            View All
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {alerts.map((alert) => (
-            <div key={alert.id} className="flex items-start gap-4 rounded-lg border p-4">
-              <div
-                className={`mt-0.5 h-2 w-2 rounded-full ${
-                  alert.severity === "high"
-                    ? "bg-red-500"
-                    : alert.severity === "medium"
-                      ? "bg-amber-500"
-                      : "bg-green-500"
-                }`}
-              />
-              <div className="flex-1 space-y-1">
-                <div className="flex items-center justify-between">
-                  <p className="font-medium">{alert.plant}</p>
-                  <p className="text-xs text-muted-foreground">{alert.date}</p>
-                </div>
-                <p className="text-sm font-medium text-muted-foreground">{alert.issue}</p>
-                <p className="text-sm text-muted-foreground">{alert.description}</p>
-              </div>
-              <Button size="sm" variant="outline" className="shrink-0">
-                View Treatment
-              </Button>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
