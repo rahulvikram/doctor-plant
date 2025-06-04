@@ -8,12 +8,11 @@ import { Calendar, TrendingUp, AlertTriangle, CheckCircle, Download, Share } fro
 
 type Plant = {
   id: string
-  name: string
   species: string
   image: string
   diagnosis: string
   treatments: string[]
-  confidence: number
+  confidence: string
   severity: "low" | "medium" | "high"
   plant_health: "excellent" | "good" | "fair" | "poor" | "critical"
   date: Date
@@ -61,7 +60,7 @@ export function PlantDetailModal({ plant, onClose }: PlantDetailModalProps) {
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-2xl text-[#2E7D32]">{plant.name}</DialogTitle>
+            <DialogTitle className="text-2xl text-[#2E7D32]">{plant.species}</DialogTitle>
             <div className="flex gap-2">
               <Button size="sm" variant="outline" className="border-[#4CAF50] text-[#4CAF50]">
                 <Share className="h-4 w-4 mr-1" />
@@ -81,7 +80,7 @@ export function PlantDetailModal({ plant, onClose }: PlantDetailModalProps) {
             <div className="relative">
               <img
                 src={plant.image || "/placeholder.svg"}
-                alt={plant.name}
+                alt={plant.species}
                 className="w-full h-64 object-cover rounded-lg"
               />
               <div className="absolute top-2 right-2 flex gap-2">

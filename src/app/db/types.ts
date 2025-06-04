@@ -1,14 +1,17 @@
 export interface Plant {
-    id: string;
-    disease: string;
-    treatments: string[];
-    image: string // base64 encoded image
-    confidence: string;
-    severity: string;
-    plant_health: string;
-    date: string;
+    id: string
+    name: string
+    species: string
+    image: string
+    diagnosis: string
+    treatments: string[]
+    confidence: number
+    severity: "low" | "medium" | "high"
+    plant_health: "excellent" | "good" | "fair" | "poor" | "critical"
+    date: Date
+    notes?: string
 }
 
 export interface DbSchema {
-    plants: Plant[];
+    plants: Plant[]
 }

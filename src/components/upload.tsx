@@ -126,27 +126,33 @@ export function Upload() {
         // Download the PDF
         const pdfUrl = `http://localhost:${API_ROUTE_PORT}/download-pdf/${data.pdf_timestamp}`
         window.open(pdfUrl, '_blank')
-        
+
         // Add the treatment to the database
         const plant: Plant = {
           id: uuidv4(),
-          disease: analysisResults.disease_detected,
-          treatments: analysisResults.recommendations,
+          species: analysisResults.plant_species,
           image: previews[0],
-          confidence: analysisResults.confidence,
-          severity: analysisResults.severity,
-          plant_health: analysisResults.plant_health,
-          date: new Date().toISOString()
+          diagnosis: analysisResults.disease_detected,
+          treatments: analysisResults.recommendations,
+          confidence: parseInt(analysisResults.confidence),
+          severity: analysisResults.severity.toLowerCase() as "low" | "medium" | "high",
+          plant_health: analysisResults.plant_health.toLowerCase() as "excellent" | "good" | "fair" | "poor" | "critical",
+          date: new Date(),
+          notes: symptoms
         }
 
-        // send the plant to the server
-        await fetch('/api/plants', {
+        // Save plant using the API route
+        const plantResponse = await fetch('/api/plants', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(plant)
-        });
+        })
+
+        if (!plantResponse.ok) {
+          throw new Error('Failed to save plant data')
+        }
 
         // Reset form state
         setFiles([])

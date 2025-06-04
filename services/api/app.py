@@ -38,7 +38,8 @@ async def ai_response(image_data: bytes, prompt: str, plant_type: str, plant_spe
             "confidence": "0%",
             "severity": "Unknown",
             "recommendations": [f"Error: {str(e)}"],
-            "plant_health": "Unknown"
+            "plant_health": "Unknown",
+            "extra_info": "Unknown"
         }
 
 def generate_pdf_report(analysis_results: dict) -> BytesIO:

@@ -10,6 +10,7 @@ export async function GET() {
         const plants = await db.getPlants();
         return NextResponse.json(plants);
     } catch (error) {
+        console.error('GET /api/plants error:', error);
         return NextResponse.json({ error: 'Failed to fetch plants' }, { status: 500 });
     }
 }
@@ -22,6 +23,7 @@ export async function POST(request: Request) {
         await db.addPlant(plant);
         return NextResponse.json({ message: 'Plant added successfully' });
     } catch (error) {
+        console.error('POST /api/plants error:', error);
         return NextResponse.json({ error: 'Failed to add plant' }, { status: 500 });
     }
 }

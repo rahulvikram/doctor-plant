@@ -1,10 +1,10 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Search, Grid, List } from "lucide-react"
+import { Search, Grid, List, Loader2 } from "lucide-react"
 import { PlantCard } from "./plant-card"
 import { PlantDetailModal } from "./plant-detail-modal"
 
@@ -22,90 +22,10 @@ type Plant = {
   notes?: string
 }
 
-// Mock data for demonstration
-const mockPlants: Plant[] = [
-  {
-    id: "1",
-    name: "Monstera Deliciosa",
-    species: "Monstera deliciosa",
-    image: "/placeholder.svg?height=300&width=300",
-    diagnosis: "Leaf Yellowing - Overwatering",
-    treatments: ["Reduce watering frequency", "Improve drainage", "Remove affected leaves"],
-    confidence: 94,
-    severity: "medium",
-    plant_health: "fair",
-    date: new Date("2024-01-15"),
-    notes: "Large houseplant showing signs of overwatering. Owner reports watering daily.",
-  },
-  {
-    id: "2",
-    name: "Snake Plant",
-    species: "Sansevieria trifasciata",
-    image: "/placeholder.svg?height=300&width=300",
-    diagnosis: "Root Rot - Severe Overwatering",
-    treatments: ["Emergency repotting", "Antifungal treatment", "Quarantine from other plants"],
-    confidence: 98,
-    severity: "high",
-    plant_health: "poor",
-    date: new Date("2024-01-12"),
-    notes: "Severe root rot detected. Immediate action required to save the plant.",
-  },
-  {
-    id: "3",
-    name: "Peace Lily",
-    species: "Spathiphyllum wallisii",
-    image: "/placeholder.svg?height=300&width=300",
-    diagnosis: "Brown Leaf Tips - Low Humidity",
-    treatments: ["Increase humidity", "Use distilled water", "Trim brown tips"],
-    confidence: 87,
-    severity: "low",
-    plant_health: "good",
-    date: new Date("2024-01-10"),
-    notes: "Common issue with peace lilies in dry indoor environments.",
-  },
-  {
-    id: "4",
-    name: "Fiddle Leaf Fig",
-    species: "Ficus lyrata",
-    image: "/placeholder.svg?height=300&width=300",
-    diagnosis: "Healthy Plant - No Issues Detected",
-    treatments: ["Continue current care routine", "Monitor for changes"],
-    confidence: 96,
-    severity: "low",
-    plant_health: "excellent",
-    date: new Date("2024-01-08"),
-    notes: "Plant appears healthy with no visible issues. Maintain current care schedule.",
-  },
-  {
-    id: "5",
-    name: "Rubber Plant",
-    species: "Ficus elastica",
-    image: "/placeholder.svg?height=300&width=300",
-    diagnosis: "Pest Infestation - Spider Mites",
-    treatments: ["Neem oil treatment", "Increase humidity", "Isolate plant", "Weekly monitoring"],
-    confidence: 91,
-    severity: "high",
-    plant_health: "poor",
-    date: new Date("2024-01-05"),
-    notes: "Spider mites detected on undersides of leaves. Webbing visible.",
-  },
-  {
-    id: "6",
-    name: "Pothos",
-    species: "Epipremnum aureum",
-    image: "/placeholder.svg?height=300&width=300",
-    diagnosis: "Nutrient Deficiency - Nitrogen",
-    treatments: ["Balanced fertilizer", "Increase feeding frequency", "Check soil pH"],
-    confidence: 89,
-    severity: "medium",
-    plant_health: "fair",
-    date: new Date("2024-01-03"),
-    notes: "Yellowing of older leaves indicates nitrogen deficiency.",
-  },
-]
-
 export function PlantLibrary() {
-  const [plants] = useState<Plant[]>(mockPlants)
+  const [plants, setPlants] = useState<Plant[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState("")
   const [sortBy, setSortBy] = useState("date")
   const [filterHealth, setFilterHealth] = useState("all")
@@ -113,10 +33,43 @@ export function PlantLibrary() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null)
 
+  // Fetch plants when component mounts
+  useEffect(() => {
+    const fetchPlants = async () => {
+      try {
+        setIsLoading(true)
+        const response = await fetch('/api/plants', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch plants')
+        }
+
+        const data = await response.json()
+        // Convert date strings to Date objects
+        const plantsWithDates = data.map((plant: any) => ({
+          ...plant,
+          date: new Date(plant.date)
+        }))
+        setPlants(plantsWithDates)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchPlants()
+  }, [])
+
   const filteredAndSortedPlants = useMemo(() => {
     const filtered = plants.filter((plant) => {
+        console.log(plant)
       const matchesSearch =
-        plant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         plant.species.toLowerCase().includes(searchTerm.toLowerCase()) ||
         plant.diagnosis.toLowerCase().includes(searchTerm.toLowerCase())
 
@@ -145,6 +98,40 @@ export function PlantLibrary() {
 
     return filtered
   }, [plants, searchTerm, sortBy, filterHealth, filterSeverity])
+
+  // Add loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="h-16 w-16 rounded-full bg-[#E8F5E9] flex items-center justify-center mx-auto mb-4 animate-pulse">
+            <Loader2 className="h-8 w-8 text-[#4CAF50]" />
+          </div>
+          <h3 className="text-lg font-medium text-[#2E7D32]">Loading plants...</h3>
+        </div>
+      </div>
+    )
+  }
+
+  // Add error state
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <div className="h-16 w-16 rounded-full bg-[#FFEBEE] flex items-center justify-center mx-auto mb-4">
+          {/* You can add an error icon here */}
+        </div>
+        <h3 className="text-lg font-medium text-red-700 mb-2">Failed to load plants</h3>
+        <p className="text-red-600 mb-4">{error}</p>
+        <Button
+          onClick={() => window.location.reload()}
+          variant="outline"
+          className="border-red-500 text-red-500 hover:bg-red-50"
+        >
+          Retry
+        </Button>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">

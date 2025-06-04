@@ -97,11 +97,12 @@ class Gemini2VisionModel:
            
             json_structure_guidance = """
                                 {{
+                                    "plant_species": "plant species",
                                     "disease_detected": "disease name or 'Healthy'",
                                     "confidence": "percentage like '85%'",
-                                    "severity": "None/Low/Medium/High",
+                                    "severity": "low" or "medium" or "high",
                                     "recommendations": ["action1", "action2"],
-                                    "plant_health": "percentage like '70%'"
+                                    "plant_health": "excellent" or "good" or "fair" or "poor" or "critical"
                                     "extra_info": "extra information about the plant, disease, or health"
                                 }}""" 
             user_context_obj = {
@@ -149,7 +150,8 @@ class Gemini2VisionModel:
                     "confidence": "0%",
                     "severity": "Unknown",
                     "recommendations": ["AI response was not valid JSON.", ai_response_content[:200] + "..."], # Include part of the bad response
-                    "plant_health": "Unknown"
+                    "plant_health": "Unknown",
+                    "extra_info": "Unknown"
                 }
 
         except json.JSONDecodeError as e: # This might be redundant now with the one above
@@ -159,7 +161,8 @@ class Gemini2VisionModel:
                 "confidence": "0%",
                 "severity": "Unknown",
                 "recommendations": ["Unable to parse AI response"],
-                "plant_health": "Unknown"
+                "plant_health": "Unknown",
+                "extra_info": "Unknown"
             }
         except Exception as e:
             print(f"Gemini Vision error: {e}")
@@ -168,5 +171,6 @@ class Gemini2VisionModel:
                 "confidence": "0%",
                 "severity": "Unknown",
                 "recommendations": [f"Error during API call or processing: {str(e)}"],
-                "plant_health": "Unknown"
+                "plant_health": "Unknown",
+                "extra_info": "Unknown"
             }
