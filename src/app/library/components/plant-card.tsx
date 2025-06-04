@@ -4,20 +4,8 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Calendar, Eye, AlertTriangle } from "lucide-react"
+import { Plant } from "@/app/db/types"
 
-type Plant = {
-  id: string
-  name: string
-  species: string
-  image: string
-  diagnosis: string
-  treatments: string[]
-  confidence: string
-  severity: "low" | "medium" | "high"
-  plant_health: "excellent" | "good" | "fair" | "poor" | "critical"
-  date: Date
-  notes?: string
-}
 
 interface PlantCardProps {
   plant: Plant
@@ -63,12 +51,12 @@ export function PlantCard({ plant, viewMode, onClick }: PlantCardProps) {
           <div className="flex items-center gap-4">
             <img
               src={plant.image || "/placeholder.svg"}
-              alt={plant.name}
+              alt={plant.species}
               className="w-16 h-16 rounded-lg object-cover"
             />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="font-semibold text-[#2E7D32] truncate">{plant.name}</h3>
+                <h3 className="font-semibold text-[#2E7D32] truncate">{plant.species}</h3>
                 <Badge className={getHealthColor(plant.plant_health)}>{plant.plant_health}</Badge>
               </div>
               <p className="text-sm text-[#558B59] mb-1">{plant.species}</p>
@@ -100,7 +88,7 @@ export function PlantCard({ plant, viewMode, onClick }: PlantCardProps) {
         <div className="relative">
           <img
             src={plant.image || "/placeholder.svg"}
-            alt={plant.name}
+            alt={plant.species}
             className="w-full h-48 object-cover rounded-t-lg"
           />
           <div className="absolute top-2 right-2 flex gap-2">
@@ -120,7 +108,7 @@ export function PlantCard({ plant, viewMode, onClick }: PlantCardProps) {
       <CardContent className="p-4">
         <div className="space-y-3">
           <div>
-            <h3 className="font-semibold text-[#2E7D32] mb-1">{plant.name}</h3>
+            <h3 className="font-semibold text-[#2E7D32] mb-1">{plant.species}</h3>
             <p className="text-sm text-[#558B59] italic">{plant.species}</p>
           </div>
 

@@ -134,7 +134,7 @@ export function Upload() {
           image: previews[0],
           diagnosis: analysisResults.disease_detected,
           treatments: analysisResults.recommendations,
-          confidence: parseInt(analysisResults.confidence),
+          confidence: analysisResults.confidence,
           severity: analysisResults.severity.toLowerCase() as "low" | "medium" | "high",
           plant_health: analysisResults.plant_health.toLowerCase() as "excellent" | "good" | "fair" | "poor" | "critical",
           date: new Date(),

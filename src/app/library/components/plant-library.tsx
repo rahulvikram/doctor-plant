@@ -7,20 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, Grid, List, Loader2 } from "lucide-react"
 import { PlantCard } from "./plant-card"
 import { PlantDetailModal } from "./plant-detail-modal"
+import { Plant } from "@/app/db/types"
 
-type Plant = {
-  id: string
-  name: string
-  species: string
-  image: string
-  diagnosis: string
-  treatments: string[]
-  confidence: number
-  severity: "low" | "medium" | "high"
-  plant_health: "excellent" | "good" | "fair" | "poor" | "critical"
-  date: Date
-  notes?: string
-}
 
 export function PlantLibrary() {
   const [plants, setPlants] = useState<Plant[]>([])
@@ -84,13 +72,9 @@ export function PlantLibrary() {
       switch (sortBy) {
         case "date":
           return b.date.getTime() - a.date.getTime()
-        case "name":
-          return a.name.localeCompare(b.name)
         case "health":
           const healthOrder = { excellent: 5, good: 4, fair: 3, poor: 2, critical: 1 }
           return healthOrder[b.plant_health] - healthOrder[a.plant_health]
-        case "confidence":
-          return b.confidence - a.confidence
         default:
           return 0
       }
@@ -245,7 +229,15 @@ export function PlantLibrary() {
       {/* Plants Grid/List */}
       <div className={viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" : "space-y-4"}>
         {filteredAndSortedPlants.map((plant) => (
-          <PlantCard key={plant.id} plant={plant} viewMode={viewMode} onClick={() => setSelectedPlant(plant)} />
+          <PlantCard 
+            key={plant.id} 
+            plant={{
+              ...plant,
+              confidence: plant.confidence.toString()
+            }} 
+            viewMode={viewMode} 
+            onClick={() => setSelectedPlant(plant)} 
+          />
         ))}
       </div>
 
@@ -272,7 +264,15 @@ export function PlantLibrary() {
       )}
 
       {/* Plant Detail Modal */}
-      {selectedPlant && <PlantDetailModal plant={selectedPlant} onClose={() => setSelectedPlant(null)} />}
+      {selectedPlant && (
+        <PlantDetailModal 
+          plant={{
+            ...selectedPlant,
+            confidence: selectedPlant.confidence.toString()
+          }} 
+          onClose={() => setSelectedPlant(null)} 
+        />
+      )}
     </div>
   )
 }

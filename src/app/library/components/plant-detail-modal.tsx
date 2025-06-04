@@ -5,20 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Calendar, TrendingUp, AlertTriangle, CheckCircle, Download, Share } from "lucide-react"
-
-type Plant = {
-  id: string
-  species: string
-  image: string
-  diagnosis: string
-  treatments: string[]
-  confidence: string
-  severity: "low" | "medium" | "high"
-  plant_health: "excellent" | "good" | "fair" | "poor" | "critical"
-  date: Date
-  notes?: string
-}
-
+import { Plant } from "@/app/db/types"
 interface PlantDetailModalProps {
   plant: Plant
   onClose: () => void
