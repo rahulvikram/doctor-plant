@@ -120,33 +120,14 @@ export function Upload() {
       })
 
       if (response.ok) {      
-        // Get the analysis results from the custom header
-        const analysisResults = JSON.parse(response.headers.get('X-Analysis-Results') || '{}')
+        const data = await response.json()
+        const analysisResults = data.analysis
         
-        // Download the PDF report
-        const blob = await response.blob()
-
-        // download the PDF report
-        const contentDisposition = response.headers.get("content-disposition")
-        let filename = "plant_diagnosis_report.pdf" // Default filename
-        if (contentDisposition) {
-          const filenameMatch = contentDisposition.match(/filename="?(.+)"?/i)
-          if (filenameMatch && filenameMatch.length > 1) {
-            filename = filenameMatch[1]
-          }
-        }
-      
-        // create a temporary URL for the blob
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement("a")
-        a.href = url
-        a.download = filename
-        document.body.appendChild(a)
-        a.click()
-        a.remove()
-        window.URL.revokeObjectURL(url)
-
-        // add the treatment to the database
+        // Download the PDF
+        const pdfUrl = `http://localhost:${API_ROUTE_PORT}/download-pdf/${data.pdf_timestamp}`
+        window.open(pdfUrl, '_blank')
+        
+        // Add the treatment to the database
         const plant: Plant = {
           id: uuidv4(),
           disease: analysisResults.disease_detected,
@@ -162,7 +143,7 @@ export function Upload() {
         await fetch('/api/plants', {
           method: 'POST',
           headers: {
-              'Content-Type': 'application/json',
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(plant)
         });
@@ -178,8 +159,7 @@ export function Upload() {
           fileInputRef.current.value = ""
         }
       
-        // show a success message
-        alert("Plant analysis report downloaded successfully!")
+        alert("Plant analysis completed successfully!")
         router.push("/dashboard")
       } else {
         let errorMessage = `Error analyzing plant: ${response.status} ${response.statusText}`
@@ -202,7 +182,7 @@ export function Upload() {
     } catch (error) {
       console.error("Error analyzing plant:", error)
     } finally {
-      setIsUploading(false) // reset the isUploading state to false to hide the loading spinner
+      setIsUploading(false)
     }
 
   }

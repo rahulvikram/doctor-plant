@@ -1,4 +1,4 @@
-from flask import Flask, request, send_file, make_response, jsonify
+from flask import Flask, request, send_file, make_response, jsonify, session
 from flask_cors import CORS
 import requests
 import os
@@ -163,21 +163,44 @@ def analyze_plant():
         # Generate PDF
         pdf_buffer = generate_pdf_report(gemini_response)
         
-        # Create response with both JSON data and PDF
-        response = make_response(send_file(
-            pdf_buffer,
-            mimetype='application/pdf',
-            as_attachment=True,
-            download_name=f'plant_diagnosis_report_{time.strftime("%Y%m%d_%H%M%S")}.pdf'
-        ))
+        # Create unique identifier for this analysis
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
         
-        # Add the analysis results as headers
-        response.headers['X-Analysis-Results'] = jsonify(gemini_response).get_data(as_text=True)
+        # Store PDF buffer in memory (you might want to use a proper caching solution in production)
+        if not hasattr(app, 'pdf_buffers'):
+            app.pdf_buffers = {}
+        app.pdf_buffers[timestamp] = pdf_buffer
 
-        return response
+        # Return analysis results and PDF URL
+        return jsonify({
+            'analysis': gemini_response,
+            'pdf_timestamp': timestamp
+        })
             
     except Exception as e:
         print(f"Error occurred: {str(e)}")
+        return {'error': str(e)}, 500
+
+# New endpoint for PDF download
+@app.route('/download-pdf/<timestamp>', methods=['GET'])
+def download_pdf(timestamp):
+    try:
+        if not hasattr(app, 'pdf_buffers') or timestamp not in app.pdf_buffers:
+            return {'error': 'PDF not found'}, 404
+            
+        pdf_buffer = app.pdf_buffers[timestamp]
+        
+        # Clean up the stored buffer after sending
+        del app.pdf_buffers[timestamp]
+        
+        return send_file(
+            pdf_buffer,
+            mimetype='application/pdf',
+            as_attachment=True,
+            download_name=f'plant_diagnosis_report_{timestamp}.pdf'
+        )
+    except Exception as e:
+        print(f"Error downloading PDF: {str(e)}")
         return {'error': str(e)}, 500
 
 if __name__ == '__main__':
