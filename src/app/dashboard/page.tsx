@@ -144,7 +144,7 @@ function QuickActions() {
           <p className="text-xs text-muted-foreground">Your personal plant collection</p>
         </CardContent>
         <CardFooter>
-          <Button size="sm" variant="outline" className="w-full border-teal-200 text-teal-700">
+          <Button size="sm" variant="outline" className="w-full border-teal-200 text-teal-700" onClick={() => router.push("/library")}>
             Browse Library
           </Button>
         </CardFooter>

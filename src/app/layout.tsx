@@ -44,6 +44,9 @@ export default function RootLayout({
             <Link href="/diagnose" className="text-green-700 hover:text-green-900">
               Diagnose
             </Link>
+            <Link href="/library" className="text-green-700 hover:text-green-900">
+              Library
+            </Link>
             <Link href="/chat" className="text-green-700 hover:text-green-900">
               AI Chat
             </Link>
