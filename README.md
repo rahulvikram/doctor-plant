@@ -2,6 +2,8 @@
 
 Doctor Plant is an intelligent application that helps users diagnose plant diseases and get treatment recommendations using AI technology. The application analyzes plant images and provides detailed insights about plant health, detected diseases, and recommended treatments.
 
+![image](public/assets/home.png)
+
 ## 🌟 Features
 
 - **AI-Powered Disease Detection**: Upload plant images to get instant disease diagnosis
@@ -11,9 +13,20 @@ Doctor Plant is an intelligent application that helps users diagnose plant disea
   - Severity assessment
   - Plant health percentage
   - Treatment recommendations
+
+![image](public/assets/diagnose.png)
+
+- **Conversational AI**: Ask questions regarding plant care and get answers
+
+![image](public/assets/chat.png)
+
+- **User Dashboard**: View all the app's features
+
+![image](public/assets/dashboard.png)
+
 - **Image Processing**: Automatic image compression and optimization
 - **User Authentication**: Secure user management with Clerk
-- **Modern UI**: Beautiful and responsive interface built with Next.js and Tailwind CSS
+- **Modern UI**: Beautiful and responsive interface built with Next.js, Tailwind CSS, and shadcn/ui
 - **Dark Mode Support**: Seamless light/dark theme switching
 
 ## 🛠️ Tech Stack
@@ -41,6 +54,9 @@ Doctor Plant is an intelligent application that helps users diagnose plant disea
    - OpenAI integration
    - Image analysis capabilities
 
+3. **Local JSON Database**
+   - Next.js API Routing
+   - lowdb local JSON storage
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -119,14 +135,3 @@ flask run
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- Google AI/Generative Language for disease detection
-- OpenAI for additional analysis capabilities
-- The open-source community for the amazing tools and libraries
-
