@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ImagePlus, UploadIcon, X, Crop, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { getDatabase } from "@/app/db/dbAdapter"
-import { Treatment } from "@/app/db/Types"
+import { Plant } from "@/app/db/types"
 import { v4 as uuidv4 } from 'uuid';
 
 export function Upload() {
@@ -147,16 +147,25 @@ export function Upload() {
         window.URL.revokeObjectURL(url)
 
         // add the treatment to the database
-        const db = await getDatabase()
-        const treatment: Treatment = {
+        const plant: Plant = {
           id: uuidv4(),
           disease: analysisResults.disease_detected,
           treatments: analysisResults.recommendations,
           image: previews[0],
+          confidence: analysisResults.confidence,
+          severity: analysisResults.severity,
+          plant_health: analysisResults.plant_health,
           date: new Date().toISOString()
         }
 
-        await db.addTreatment(treatment)
+        // send the plant to the server
+        await fetch('/api/plants', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(plant)
+        });
 
         // Reset form state
         setFiles([])

@@ -120,7 +120,7 @@ function QuickActions() {
   const router = useRouter();
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
       <Card className="bg-green-50 border-green-100">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium text-green-800">Scan Plant</CardTitle>
@@ -132,20 +132,6 @@ function QuickActions() {
         <CardFooter>
           <Button size="sm" className="w-full bg-green-600 hover:bg-green-700" onClick={() => router.push("/diagnose")}>
             Start Scan
-          </Button>
-        </CardFooter>
-      </Card>
-      <Card className="bg-emerald-50 border-emerald-100">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-emerald-800">Treatment Plans</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-emerald-900">3 Active</div>
-          <p className="text-xs text-muted-foreground">View and manage treatment schedules</p>
-        </CardContent>
-        <CardFooter>
-          <Button size="sm" variant="outline" className="w-full border-emerald-200 text-emerald-700">
-            View Plans
           </Button>
         </CardFooter>
       </Card>
