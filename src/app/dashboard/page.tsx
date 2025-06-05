@@ -118,7 +118,6 @@ function DashboardHeader() {
 
 function QuickActions() {
   const router = useRouter();
-
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
       <Card className="bg-green-50 border-green-100">
@@ -140,7 +139,6 @@ function QuickActions() {
           <CardTitle className="text-sm font-medium text-teal-800">Plant Library</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-teal-900">24 Plants</div>
           <p className="text-xs text-muted-foreground">Your personal plant collection</p>
         </CardContent>
         <CardFooter>

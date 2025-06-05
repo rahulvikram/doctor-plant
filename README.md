@@ -24,6 +24,11 @@ Doctor Plant is an intelligent application that helps users diagnose plant disea
 
 ![image](public/assets/dashboard.png)
 
+- **Plant Library**: View all past plant uploads, diagnoses, treatment plans, etc. Instantly updated and maintained via a Next.js API route that calls a lowdb-based custom database adapter written in TypeScript.
+
+![image](public/assets/library.png)
+
+
 - **Image Processing**: Automatic image compression and optimization
 - **User Authentication**: Secure user management with Clerk
 - **Modern UI**: Beautiful and responsive interface built with Next.js, Tailwind CSS, and shadcn/ui
