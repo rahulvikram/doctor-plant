@@ -1,6 +1,6 @@
-# Doctor Plant: AI-powered Plant Disease Diagnostics Tool
+# LeafLens.ai: AI-powered Plant Disease Diagnostics Tool
 
-Doctor Plant is an intelligent application that helps users diagnose plant diseases and get treatment recommendations using AI technology. The application analyzes plant images and provides detailed insights about plant health, detected diseases, and recommended treatments.
+LeafLens.ai is an intelligent application that helps users diagnose plant diseases and get treatment recommendations using AI technology. The application analyzes plant images and provides detailed insights about plant health, detected diseases, and recommended treatments.
 
 ![image](public/assets/home.png)
 
