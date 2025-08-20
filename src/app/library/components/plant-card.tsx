@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Calendar, Eye, AlertTriangle } from "lucide-react"
 import { Plant } from "@/app/db/types"
-
+import Image from "next/image"
 
 interface PlantCardProps {
   plant: Plant
@@ -49,7 +49,7 @@ export function PlantCard({ plant, viewMode, onClick }: PlantCardProps) {
       <Card className="border-[#D8EFD9] hover:border-[#4CAF50] transition-colors cursor-pointer" onClick={onClick}>
         <CardContent className="p-4">
           <div className="flex items-center gap-4">
-            <img
+            <Image
               src={plant.image || "/placeholder.svg"}
               alt={plant.species}
               className="w-16 h-16 rounded-lg object-cover"
@@ -86,7 +86,7 @@ export function PlantCard({ plant, viewMode, onClick }: PlantCardProps) {
     <Card className="border-[#D8EFD9] hover:border-[#4CAF50] transition-colors cursor-pointer" onClick={onClick}>
       <CardHeader className="p-0">
         <div className="relative">
-          <img
+          <Image
             src={plant.image || "/placeholder.svg"}
             alt={plant.species}
             className="w-full h-48 object-cover rounded-t-lg"

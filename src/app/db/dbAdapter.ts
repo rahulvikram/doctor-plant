@@ -1,10 +1,16 @@
+import { Low } from "lowdb";
 import { Plant, DbSchema } from "./types";
+import { JSONFile } from "lowdb/node";
+import { join } from "path";
 
 class DatabaseAdapter {
-    private db: any; 
+    private db: Low<DbSchema>; 
     private static instance: DatabaseAdapter;
 
-    private constructor() {}
+    private constructor() {
+        this.db = new Low(new JSONFile<DbSchema>(join(process.cwd(), "db.json")), {plants: []});
+        this.db.read();
+    }
 
     // Using singleton pattern to ensure only one instance of the database adapter
     static async getInstance(): Promise<DatabaseAdapter> {

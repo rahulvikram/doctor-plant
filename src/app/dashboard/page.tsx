@@ -1,27 +1,13 @@
 "use client"
 
-import { Bell, Calendar, Home, Leaf, PieChart, Plus, Settings, Upload, Users } from "lucide-react"
+import { Plus, Upload } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { SignedIn, SignedOut, UserButton, SignInButton, SignUpButton } from "@clerk/nextjs"
-import {
-  SidebarProvider,
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarFooter,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
-  SidebarInset,
-} from "@/components/ui/sidebar"
+import { SignedIn, SignedOut } from "@clerk/nextjs"
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
 
 export default function DashboardPage() {
   return (
@@ -40,7 +26,6 @@ export default function DashboardPage() {
                 </TabsList>
                 <TabsContent value="overview" className="space-y-6">
                   <QuickActions />
-                  <RecentUploads />
                 </TabsContent>
                 <TabsContent value="analytics">
                   <Card>
@@ -150,126 +135,3 @@ function QuickActions() {
     </div>
   )
 }
-
-function UploadStatsCard() {
-  return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium">Upload Statistics</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-muted-foreground">This Month</p>
-            <p className="text-2xl font-bold">24</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Last Month</p>
-            <p className="text-2xl font-bold">18</p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Total</p>
-            <p className="text-2xl font-bold">142</p>
-          </div>
-        </div>
-        <div className="space-y-2">
-          <p className="text-sm text-muted-foreground">Storage Used</p>
-          <Progress value={35} className="h-2 bg-gray-100 [&>div]:bg-green-500" />
-          <p className="text-xs text-muted-foreground">350MB of 1GB</p>
-        </div>
-      </CardContent>
-      <CardFooter>
-        <Button variant="ghost" size="sm" className="w-full text-green-700">
-          Manage Storage
-        </Button>
-      </CardFooter>
-    </Card>
-  )
-}
-
-function RegionalAlertsCard() {
-  return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-sm font-medium">Regional Alerts</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="rounded-md bg-amber-50 p-3 border border-amber-100">
-          <div className="flex items-start gap-2">
-            <Bell className="h-4 w-4 text-amber-600 mt-0.5" />
-            <div>
-              <p className="text-sm font-medium text-amber-800">Powdery Mildew Alert</p>
-              <p className="text-xs text-amber-700">
-                High humidity levels in your region may increase risk of powdery mildew.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="rounded-md bg-blue-50 p-3 border border-blue-100">
-          <div className="flex items-start gap-2">
-            <Bell className="h-4 w-4 text-blue-600 mt-0.5" />
-            <div>
-              <p className="text-sm font-medium text-blue-800">Frost Warning</p>
-              <p className="text-xs text-blue-700">
-                Temperatures expected to drop below freezing tonight. Protect sensitive plants.
-              </p>
-            </div>
-          </div>
-        </div>
-      </CardContent>
-      <CardFooter>
-        <Button variant="ghost" size="sm" className="w-full text-green-700">
-          View All Alerts
-        </Button>
-      </CardFooter>
-    </Card>
-  )
-}
-
-function RecentUploads() {
-  const recentUploads: any[] = []
-
-  return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>Recent Uploads</CardTitle>
-          <Button variant="ghost" size="sm" className="text-green-700">
-            View All
-          </Button>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {recentUploads.map((upload) => (
-            <div key={upload.id} className="rounded-lg border bg-card overflow-hidden">
-              <div className="relative h-32 w-full">
-                <img
-                  src={upload.image || "/placeholder.svg"}
-                  alt={upload.name}
-                  className="h-full w-full object-cover"
-                />
-                <div
-                  className={`absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-medium ${
-                    upload.status === "Healthy"
-                      ? "bg-green-100 text-green-800"
-                      : upload.status === "Needs Water"
-                        ? "bg-amber-100 text-amber-800"
-                        : "bg-red-100 text-red-800"
-                  }`}
-                >
-                  {upload.status}
-                </div>
-              </div>
-              <div className="p-3">
-                <h3 className="font-medium">{upload.name}</h3>
-                <p className="text-xs text-muted-foreground">{upload.date}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
-

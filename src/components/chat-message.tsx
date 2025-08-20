@@ -1,6 +1,7 @@
 import { Avatar } from "@/components/ui/avatar"
 import { Leaf, User } from "lucide-react"
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 type Message = {
   id: string
@@ -33,7 +34,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
       >
         {message.imageUrl && (
           <div className="mb-2">
-            <img
+            <Image
               src={message.imageUrl || "/placeholder.svg"}
               alt="Uploaded plant"
               className="rounded-md max-h-48 object-contain"

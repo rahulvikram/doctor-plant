@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Leaf, ArrowRight, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
-import { SignedOut, SignedIn, UserButton, SignInButton, SignUpButton } from "@clerk/nextjs";
+import { SignedOut } from "@clerk/nextjs";
 
 export default function LandingPage() {
   return (

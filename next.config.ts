@@ -9,16 +9,24 @@ const nextConfig: NextConfig = {
         ]
     },
     webpack: (config, { isServer }) => {
-        if (!isServer) {
-          // Don't resolve 'fs' module on the client to prevent this error
-          config.resolve.fallback = {
-            ...config.resolve.fallback,
-            fs: false,
-            path: false,
-          };
-        }
-        return config;
-      },
+      if (!isServer) {
+        // Don't resolve 'fs' module on the client to prevent this error
+        config.resolve.fallback = {
+          ...config.resolve.fallback,
+          fs: false,
+          path: false,
+        };
+      }
+      return config;
+    },
+    images: {
+      remotePatterns: [
+        {
+          protocol: 'http',
+          hostname: '**',
+        },
+      ],
+    }
 };
 
 export default nextConfig;

@@ -39,7 +39,7 @@ export function PlantLibrary() {
 
         const data = await response.json()
         // Convert date strings to Date objects
-        const plantsWithDates = data.map((plant: any) => ({
+        const plantsWithDates = data.map((plant: Plant) => ({
           ...plant,
           date: new Date(plant.date)
         }))

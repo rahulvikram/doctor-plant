@@ -10,9 +10,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ImagePlus, UploadIcon, X, Crop, Loader2 } from "lucide-react"
 import { useRouter } from "next/navigation"
-import { getDatabase } from "@/app/db/dbAdapter"
 import { Plant } from "@/app/db/types"
 import { v4 as uuidv4 } from 'uuid';
+import Image from "next/image"
 
 export function Upload() {
   const [files, setFiles] = useState<File[]>([])
@@ -175,7 +175,7 @@ export function Upload() {
             errorMessage = `Error analyzing plant: ${errorData.error}`
           }
         } catch (jsonError) {
-          console.warn("Response was not valid JSON. Reading as text.")
+          console.warn(`Error: ${jsonError} Response was not valid JSON. Reading as text.`)
           try {
             const errorText = await response.text()
             errorMessage = `Error analyzing plant: ${response.status} ${response.statusText}. Server response: ${errorText.substring(0, 300)}...`
@@ -243,7 +243,7 @@ export function Upload() {
                   selectedImageIndex === index ? "border-[#4CAF50]" : "border-transparent"
                 }`}
               >
-                <img
+                <Image
                   src={preview || "/placeholder.svg"}
                   alt={`Plant image ${index + 1}`}
                   className="w-full h-full object-cover cursor-pointer"

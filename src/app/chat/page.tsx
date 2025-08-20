@@ -1,5 +1,5 @@
 import { ChatInterface } from "@/components/chat-interface"
-import { SignedIn, SignedOut, UserButton, SignInButton, SignUpButton } from "@clerk/nextjs"
+import { SignedIn, SignedOut } from "@clerk/nextjs"
 
 export default function ChatPage() {
   return (

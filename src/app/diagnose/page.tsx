@@ -1,5 +1,5 @@
 import { Upload } from "@/components/upload"
-import { SignedIn, SignedOut, UserButton, SignInButton, SignUpButton } from "@clerk/nextjs"
+import { SignedIn, SignedOut } from "@clerk/nextjs"
 
 export default function Home() {
   return (

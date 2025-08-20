@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Calendar, TrendingUp, AlertTriangle, CheckCircle, Download, Share } from "lucide-react"
 import { Plant } from "@/app/db/types"
+import Image from "next/image"
+
 interface PlantDetailModalProps {
   plant: Plant
   onClose: () => void
@@ -65,7 +67,7 @@ export function PlantDetailModal({ plant, onClose }: PlantDetailModalProps) {
           {/* Image and Basic Info */}
           <div className="space-y-4">
             <div className="relative">
-              <img
+              <Image
                 src={plant.image || "/placeholder.svg"}
                 alt={plant.species}
                 className="w-full h-64 object-cover rounded-lg"

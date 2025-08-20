@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { ClerkProvider } from '@clerk/nextjs'
-import { Leaf, ArrowRight, Check } from "lucide-react"
+import { Leaf } from "lucide-react"
 import { InteractiveHoverButton } from "@/components/magicui/interactive-hover-button";
 import Link from "next/link"
 import { SignedIn, SignedOut, UserButton, SignInButton, SignUpButton } from "@clerk/nextjs";
@@ -24,13 +24,15 @@ export const metadata: Metadata = {
   description: 'LeafLens.ai is a plant health assistant that uses AI to diagnose and treat plant diseases.',
 }
 
+const publishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider publishableKey={publishableKey}>
       <html lang="en">
         <header className="container mx-auto px-4 py-6 flex items-center justify-between">
           <div className="flex items-center gap-2">
